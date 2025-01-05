@@ -82,7 +82,6 @@ func deleteAlbums(c *gin.Context) {
 				return
 			}
 
-			// albums[i] = deletedAlbum
 			albums = append(albums[:i], albums[i+1:]...)
 			c.IndentedJSON(http.StatusOK, albums)
 			return
