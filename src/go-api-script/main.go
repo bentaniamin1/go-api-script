@@ -3,6 +3,9 @@ package main
 import (
 	"net/http"
 
+	"sync"
+	"time"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,6 +14,23 @@ type album struct {
 	Title  string  `json:"title"`
 	Artist string  `json:"artist"`
 	Price  float64 `json:"price"`
+}
+
+type Response struct {
+	Service1 string `json:"service1"`
+	Service2 string `json:"service2"`
+}
+
+func fetchService1(wg *sync.WaitGroup, ch chan<- string) {
+	defer wg.Done()
+	time.Sleep(2 * time.Second)
+	ch <- "Réponse du Service 1"
+}
+
+func fetchService2(wg *sync.WaitGroup, ch chan<- string) {
+	defer wg.Done()
+	time.Sleep(2 * time.Second)
+	ch <- "Réponse du Service 2"
 }
 
 var albums = []album{
