@@ -110,8 +110,34 @@ func deleteAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "album not found"})
 }
 
+func handlerWithGorutine(c *gin.Context) {
+
+	var wg sync.WaitGroup
+	service1Chan := make(chan string)
+	service2Chan := make(chan string)
+
+	wg.Add(2)
+
+	go fetchService1(&wg, service1Chan)
+	go fetchService2(&wg, service2Chan)
+
+	go func() {
+		wg.Wait()
+		close(service1Chan)
+		close(service2Chan)
+	}()
+
+	// Construire la réponse API
+	response := Response{
+		Service1: <-service1Chan,
+		Service2: <-service2Chan,
+	}
+	c.IndentedJSON(http.StatusOK, response)
+}
+
 func main() {
 	router := gin.Default()
+	// router.GET("/handlerWithGorutine", handlerWithGorutine)
 	router.GET("/albums", getAlbums)
 	router.GET("/albumByID/:id", getAlbumByID)
 	router.POST("/postAlbums", postAlbums)
