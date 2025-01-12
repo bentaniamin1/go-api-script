@@ -127,7 +127,6 @@ func handlerWithGorutine(c *gin.Context) {
 		close(service2Chan)
 	}()
 
-	// Construire la réponse API
 	response := Response{
 		Service1: <-service1Chan,
 		Service2: <-service2Chan,
