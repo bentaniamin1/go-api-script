@@ -137,7 +137,7 @@ func handlerWithGorutine(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
-	// router.GET("/handlerWithGorutine", handlerWithGorutine)
+	router.GET("/handlerWithGorutine", handlerWithGorutine)
 	router.GET("/albums", getAlbums)
 	router.GET("/albumByID/:id", getAlbumByID)
 	router.POST("/postAlbums", postAlbums)
